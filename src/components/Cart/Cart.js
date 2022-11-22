@@ -1,9 +1,25 @@
-import React from 'react'
-import classes from './cart.module.css'
+import React,{useContext}from 'react'
+import classes from './Cart.module.css';
 import Modal from '../UI/Modal'
+import CartContext from '../store/cart-context'
 
 function Cart(props) {
-    const cartitems=<ul className={classes['cart-items']}>{[{id:'c1',name:'manch',price:12.99}].map((item)=><li>{item.name}</li>)}</ul>
+
+  const cartcntx= useContext(CartContext);
+    
+    const cartitems=<ul className={classes['cart-items']}>{cartcntx.items.map((item)=>{
+    return( 
+
+      <li>
+        Name: {item.name} Price:{item.price} Quantity:{item.quantity}
+        <button id={item.id} onClick={cartcntx.removeItem}>X</button>
+      </li>
+    )
+    })}</ul>
+    let total = 0;
+    cartcntx.items.forEach((item) => {
+      total += item.price * item.quantity;
+    });
 
 
   return (
@@ -12,7 +28,7 @@ function Cart(props) {
         
         <div className={classes.total}>
             <span>Total Amount</span>
-            <span>123.11</span>
+            <span>{total}</span>
         </div>
         <div className={classes.actions}>
             <button className={classes['button--alt']} onClick={props.onClose}>Close</button>
@@ -23,4 +39,4 @@ function Cart(props) {
   )
 }
 
-export default Cart
+export default Cart;
